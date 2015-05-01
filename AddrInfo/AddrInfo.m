@@ -44,6 +44,8 @@
     self.service = lService;
     struct addrinfo *res;
     
+    // POSIX API call: given hostname, return us socket address
+    // under-the-hood, these POSIX functions send our requests to appropriate DNS servers to perform the resolution
     _errorCode = getaddrinfo([self.hostname UTF8String], [self.service UTF8String], lHints, &res);
     self.results = res;
 }
@@ -52,6 +54,9 @@
     [self setVars];
     char host[1024];
     char serv[20];
+    
+    // POSIX API call: given socket address, return us the hostname
+    // under-the-hood, these POSIX functions send our requests to appropriate DNS servers to perform the resolution
     _errorCode = getnameinfo(saddr, sizeof(saddr), host, sizeof(host), serv, sizeof(serv), 0);
     self.hostname = [NSString stringWithUTF8String:host];
     self.service = [NSString stringWithUTF8String:serv];
